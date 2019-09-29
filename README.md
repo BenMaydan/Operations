@@ -3,6 +3,10 @@ Operations game. You move around as a square and perform operations on the squar
 
 
 
+![alt text](https://github.com/BenMaydan/Operations/blob/master/OperationsGamePicture.PNG)
+
+
+
 ## Educational Value
 ### This game is meant to help kids (and adults alike) learn addition, subtraction, multiplication, and division in a fun and unique way
 
