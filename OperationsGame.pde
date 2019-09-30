@@ -1,3 +1,4 @@
+import java.math.BigInteger;
 import java.awt.Point;
 
 
@@ -31,15 +32,15 @@ void txt(String text, float size, float x, float y) { fill(0); textSize(size); t
 class Square {
   public boolean moveable;
   public color c;
-  public int number;
-  Square(color c, int n) { this.c = c; this.number = n; this.moveable = true; }
+  public long number;
+  Square(color c, long n) { this.c = c; this.number = n; this.moveable = true; }
   
   public void show(Point p, float w) {
     if (this.moveable) {
       fill(this.c);
       rect(p.x, p.y, w, w);
       noFill();
-      txt(Integer.toString(this.number), 32, p.x + w/2, p.y + w/2);
+      txt(Long.toString(this.number), 32, p.x + w/2, p.y + w/2);
     }
   }
   
@@ -48,7 +49,7 @@ class Square {
       fill(this.c);
       rect(p.x, p.y, w, w, rad);
       noFill();
-      txt(Integer.toString(this.number), 32, p.x + w/2, p.y + w/2);
+      txt(Long.toString(this.number), 32, p.x + w/2, p.y + w/2);
     }
   }
 }
@@ -67,12 +68,12 @@ void keyPressed() {
   
   if (LEGAL_KEY && squares[pos.x-1][pos.y-1].moveable == true) {
     // Performs operator on previous value and current value
-    if      (operations[0] == "+") { value += squares[pos.x-1][pos.y-1].number; }
-    else if (operations[0] == "-") { value -= squares[pos.x-1][pos.y-1].number; }
-    else if (operations[0] == "*") { value *= squares[pos.x-1][pos.y-1].number; } 
+    if      (operations[0] == "+") { value = value.add(BigInteger.valueOf(squares[pos.x-1][pos.y-1].number)); }
+    else if (operations[0] == "-") { value = value.subtract(BigInteger.valueOf(squares[pos.x-1][pos.y-1].number)); }
+    else if (operations[0] == "*") { value = value.multiply(BigInteger.valueOf(squares[pos.x-1][pos.y-1].number)); } 
     else if (operations[0] == "/") {
       // Don't want to divide by zero
-      try { value /= squares[pos.x-1][pos.y-1].number; }
+      try { value = value.divide(BigInteger.valueOf(squares[pos.x-1][pos.y-1].number)); }
       catch (ArithmeticException e) { background(255); txt("YOU DIVIDED BY ZERO!\n Your final score: Undefined", 32, width/2, height/2); noLoop(); }
     } 
     
@@ -107,6 +108,12 @@ void draw() {
   txt("Operations: (" + join(operations, ", ") + "). Current Operation: \"" + operations[0] + "\"", 32, width/4, 32);
   txt("Value: " + value, 32, width/4, 64);
   
+
+  //Draws the current position as black
+  fill(0);
+  rect((width/2)/3, (height-TEXT_SPACE)/3+TEXT_SPACE, (width/2)/3, (height-TEXT_SPACE)/3);
+  noFill();
+  
   // Draws one square around the current position in every direction
   int x=0, y=TEXT_SPACE;
   for (int xi = pos.x-1; xi <= pos.x+1; xi++) {
@@ -126,9 +133,10 @@ void draw() {
   int w = (width/2)/BOARD_HEIGHT, h = (height-TEXT_SPACE)/BOARD_HEIGHT;
   for (int i = 0; i < squares.length; i++) {
     for (int ii = 0; ii < squares[0].length; ii++) {
-      if (pos.x-1 == i && pos.y-1 == ii) { fill(0); rect(i*w+(width/2), ii*h+TEXT_SPACE, w, h); noFill(); }
-      else if (squares[i][ii].moveable == false) { fill(102, 255, 102); rect(i*w+(width/2), ii*h+TEXT_SPACE, w, h); noFill(); }
-      else { fill(255, 51, 51); rect(i*w+(width/2), ii*h+TEXT_SPACE, w, h); noFill(); }
+      if      (pos.x-1 == i && pos.y-1 == ii)    { fill(0);             }
+      else if (squares[i][ii].moveable == false) { fill(102, 255, 102); }
+      else                                       { fill(255, 51, 51);   }
+      rect(i*w+(width/2), ii*h+TEXT_SPACE, w, h);
     }
   }
   noFill();
@@ -139,13 +147,13 @@ void draw() {
 
 // Primitive variables
 Point pos;
-short MIN_RAND = 1;
+short MIN_RAND = 0;
 short MAX_RAND = 15;
-short BOARD_WIDTH = 5;
-short BOARD_HEIGHT = 5;
+short BOARD_WIDTH = 10;
+short BOARD_HEIGHT = 10;
 short TEXT_SPACE = 100;
 int prev_value;
-int value;
+BigInteger value = new BigInteger("0");
 boolean LEGAL_KEY;
 // Object variables
 Square[][] squares = new Square[BOARD_WIDTH][BOARD_HEIGHT];
@@ -162,7 +170,7 @@ void setup() {
       // No square on the starting position
       // FIX ME Change the 1 to a zero
       if (pos.x-1 == i && pos.y-1 == ii) { squares[i][ii] = new Square(color(240, 128, 128), 1); squares[i][ii].moveable = false; }
-      else { squares[i][ii] = new Square(color(240, 128, 128), (int)random(MIN_RAND, MAX_RAND+1)); }
+      else { squares[i][ii] = new Square(color(240, 128, 128), (long)random(MIN_RAND, MAX_RAND+1)); }
     }
   }
   
