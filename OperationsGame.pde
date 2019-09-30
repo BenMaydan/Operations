@@ -73,7 +73,7 @@ void keyPressed() {
     else if (operations[0] == "/") {
       // Don't want to divide by zero
       try { value /= squares[pos.x-1][pos.y-1].number; }
-      catch (ArithmeticException e) { background(255); txt("YOU DIVIDED BY ZERO!\n Your final score: Undefined", 32, (width-800)/2, height/2); noLoop(); }
+      catch (ArithmeticException e) { background(255); txt("YOU DIVIDED BY ZERO!\n Your final score: Undefined", 32, width/2, height/2); noLoop(); }
     } 
     
     // Change current operator every time a move happens
@@ -91,7 +91,7 @@ void keyPressed() {
     // No more squares left
     if (cont == false) {
       background(255);
-      txt("There are no more squares.\n Your final score: " + value, 32, (width-800)/2, height/2);
+      txt("There are no more squares.\n Your final score: " + value, 32, width/2, height/2);
       noLoop();
     }
   }
@@ -104,31 +104,31 @@ void draw() {
   background(255);
   
   // Text with current operations and current value
-  txt("Operations: (" + join(operations, ", ") + "). Current Operation: \"" + operations[0] + "\"", 32, (width-800)/2, 32);
-  txt("Value: " + value, 32, (width-800)/2, 64);
+  txt("Operations: (" + join(operations, ", ") + "). Current Operation: \"" + operations[0] + "\"", 32, width/4, 32);
+  txt("Value: " + value, 32, width/4, 64);
   
   // Draws one square around the current position in every direction
   int x=0, y=TEXT_SPACE;
   for (int xi = pos.x-1; xi <= pos.x+1; xi++) {
     for (int yi = pos.y-1; yi <= pos.y+1; yi++) {
       // FIXME Square farthest to the (left, right, top left)
-      try { squares[xi-1][yi-1].show(new Point(x, y), (width-800)/3, 10); }
+      try { squares[xi-1][yi-1].show(new Point(x, y), (width/2)/3, 10); }
       catch (ArrayIndexOutOfBoundsException e) {  }
       y += (height-TEXT_SPACE)/3;
     }
-    x += (width-800)/3;
+    x += (width/2)/3;
     y = TEXT_SPACE;
   }
 
   
   // Draws the map on the right of the screen with the squares you've already been on
   stroke(0);
-  int w = (width-800)/BOARD_HEIGHT, h = (height-TEXT_SPACE)/BOARD_HEIGHT;
+  int w = (width/2)/BOARD_HEIGHT, h = (height-TEXT_SPACE)/BOARD_HEIGHT;
   for (int i = 0; i < squares.length; i++) {
     for (int ii = 0; ii < squares[0].length; ii++) {
-      if (pos.x-1 == i && pos.y-1 == ii) { fill(0); rect(i*w+800, ii*h+TEXT_SPACE, w, h); noFill(); }
-      else if (squares[i][ii].moveable == false) { fill(102, 255, 102); rect(i*w+800, ii*h+TEXT_SPACE, w, h); noFill(); }
-      else { fill(255, 51, 51); rect(i*w+800, ii*h+TEXT_SPACE, w, h); noFill(); }
+      if (pos.x-1 == i && pos.y-1 == ii) { fill(0); rect(i*w+(width/2), ii*h+TEXT_SPACE, w, h); noFill(); }
+      else if (squares[i][ii].moveable == false) { fill(102, 255, 102); rect(i*w+(width/2), ii*h+TEXT_SPACE, w, h); noFill(); }
+      else { fill(255, 51, 51); rect(i*w+(width/2), ii*h+TEXT_SPACE, w, h); noFill(); }
     }
   }
   noFill();
@@ -139,10 +139,10 @@ void draw() {
 
 // Primitive variables
 Point pos;
-short MIN_RAND = 0;
+short MIN_RAND = 1;
 short MAX_RAND = 15;
-short BOARD_WIDTH = 10;
-short BOARD_HEIGHT = 10;
+short BOARD_WIDTH = 5;
+short BOARD_HEIGHT = 5;
 short TEXT_SPACE = 100;
 int prev_value;
 int value;
