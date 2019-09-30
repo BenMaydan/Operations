@@ -39,7 +39,7 @@ class Square {
       fill(this.c);
       rect(p.x, p.y, w, w);
       noFill();
-      txt(Integer.toString(this.number), 32, p.x + w/2, p.y + w/2);
+      txt(Integer.toString(this.number), 10, p.x + w/2, p.y + w/2);
     }
   }
   
@@ -48,7 +48,7 @@ class Square {
       fill(this.c);
       rect(p.x, p.y, w, w, rad);
       noFill();
-      txt(Integer.toString(this.number), 32, p.x + w/2, p.y + w/2);
+      txt(Integer.toString(this.number), 10, p.x + w/2, p.y + w/2);
     }
   }
 }
@@ -152,8 +152,10 @@ Square[][] squares = new Square[BOARD_WIDTH][BOARD_HEIGHT];
 String[] POSSIBLE_OPERATIONS = new String[] {"+", "-", "/", "*"};
 String[] operations = new String[4];
 
-void settings() { size(screen.width, screen.height); }
+
 void setup() {
+  size(screen.width, screen.height);
+  
   pos = new Point(round(random(1, BOARD_WIDTH+0.5)), round(random(1, BOARD_HEIGHT+0.5)));
   
   // Populates the board with random numbers
